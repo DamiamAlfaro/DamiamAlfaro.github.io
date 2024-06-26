@@ -10,5 +10,6 @@ Then I began to wonder, where can I find a list of all municipalities? Then I th
 enclyclopedia found in Earth (at least the one that I know of); Wikipedia. Free, public, and trustworthy.
 In it, I found what I was looking for:
 
-![WikiPage](/assets/images/CAMunicipalitiesTableHead.png)
+![WikiPageTitle](/assets/images/CAMunicipalitiesWikiPageTitle.png)
+![WikiPageExample](/assets/images/CAMunicipalitiesTableHead.png)
 
