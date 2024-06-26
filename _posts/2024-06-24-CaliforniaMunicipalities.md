@@ -13,3 +13,20 @@ In it, I found what I was looking for:
 ![WikiPageTitle](/assets/images/CAMunicipalitiesWikiPageTitle.png)
 ![WikiPageExample](/assets/images/CAMunicipalitiesTableHead.png)
 
+I suddenly decided to do what I do best, and perhaps one of the things I love the most: materializing my ideas using
+programming, mathematics, and critical thinking. 
+The idea was to get a csv file as a result from the webscraping of the newly found page, therefore I got to work instantly
+after that desired result:
+
+```
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
+
+
+url = "https://en.wikipedia.org/wiki/List_of_municipalities_in_California"
+
+souping = requests.get(url)
+soup = BeautifulSoup(souping.content, 'html.parser')
+text = soup.get_text() # Pure text without html attributes, useful for strings
+```
