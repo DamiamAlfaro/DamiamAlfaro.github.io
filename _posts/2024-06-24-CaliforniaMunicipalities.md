@@ -18,7 +18,7 @@ programming, mathematics, and critical thinking.
 The idea was to get a csv file as a result from the webscraping of the newly found page, therefore I got to work instantly
 after that desired result:
 
-```
+```python
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
