@@ -118,6 +118,7 @@ maintableHeaders = ['MunicipalityName','HumanSettlementType','MunicipalityCounty
                     'SquareMiles','SquareKilometers','PopulationDensity','DateIncorporated']
 ```
 Finally, we create a brand new csv file, allocate our variables into it, and download it. 
+The file will appear in the folder you happen to be working on. 
 ```python
 df = pd.DataFrame(data=allMunicipalities,columns=maintableHeaders)
 resultFile = "CaliforniaMunicipalities.csv"
