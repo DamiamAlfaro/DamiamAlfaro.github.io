@@ -12,7 +12,6 @@ In it, I found what I was looking for:
 
 [List of municipalities in California](https://en.wikipedia.org/wiki/List_of_municipalities_in_California) 
 
-![WikiPageTitle](/assets/images/CAMunicipalitiesWikiPageTitle.png)
 ![WikiPageExample](/assets/images/CAMunicipalitiesTableHead.png)
 
 I suddenly decided to do what I do best, and perhaps one of the things I love the most: materializing my ideas using
