@@ -12,7 +12,7 @@ In it, I found what I was looking for:
 
 [List of municipalities in California](https://en.wikipedia.org/wiki/List_of_municipalities_in_California) 
 
-![WikiPageExample](/assets/images/Web Scraping California Municipalities/FirstPost1.png)
+![WikiPageExample](/assets/images/WebScrapingCaliforniaMunicipalities1.png)
 
 I suddenly decided to do what I do best, and perhaps one of the things I love the most: materializing my ideas using
 programming, mathematics, and critical thinking. 
