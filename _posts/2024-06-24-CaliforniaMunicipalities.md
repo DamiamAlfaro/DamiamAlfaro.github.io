@@ -51,20 +51,21 @@ Now, once we find the source of the raw datum, we extract it:
 
 ```python
 municipalities = []
-for muni in range(len(tablerows)): # Part 1
+for muni in range(len(tablerows)):
   municipalityRaw = [tablerows[muni].find_all('th'),tablerows[muni].find_all('td')]
   municipalityAtt = []
-  for i in municipalityRaw[0]: # Part 2
+  for i in municipalityRaw[0]:
     x = i.text[:-1]
     if x[-1].isalpha() == False:
       municipalityAtt.append(x[:-1])
     else:
       municipalityAtt.append(x)
-  for rest in municipalityRaw[1]: # Part 3
-    if "\xa0" in rest.text: $ Part 4
+  for rest in municipalityRaw[1]:
+    if "\xa0" in rest.text:
+      # The initial string has this format in it, remove it. 
       newString = rest.text.replace('\xa0', ' ')
       municipalityAtt.append(newString[:-1])
-    elif municipalityRaw[1].index(rest) == 4: # Part 5
+    elif municipalityRaw[1].index(rest) == 4: 
       if rest.text[0] == "-":
         newString = f"({rest.text[:-2]})"
         municipalityAtt.append(newString)
@@ -72,9 +73,60 @@ for muni in range(len(tablerows)): # Part 1
         municipalityAtt.append(rest.text[1:-2])
     else:
       municipalityAtt.append(rest.text[:-1])
-  municipalities.append(municipalityAtt) # Part 6
+  municipalities.append(municipalityAtt)
 ```
-Let me break this down:
+The result is the following:
+```python
+[['Adelanto',
+  'City',
+  'San Bernardino',
+  '38,046',
+  '31,765',
+  '19.8',
+  '52.87',
+  '136.9',
+  '719.6/sq mi (277.8/km2)',
+  'December 22, 1970'],
+ ['Agoura Hills',
+  'City',
+  'Los Angeles',
+  '20,299',
+  '20,330',
+  '0.2',
+  '7.80',
+  '20.2',
+  '2,602.4/sq mi (1,004.8/km2)',
+  'December 8, 1982'],
+  [...],
+ ['Yucca Valley',
+  'Town',
+  'San Bernardino',
+  '21,738',
+  '20,700',
+  '5.0',
+  '39.83',
+  '103.2',
+  '545.8/sq mi (210.7/km2)',
+  'November 27, 1991']]
+```
+Now that we have every row within the table broken down, we need to allocate it into a [csv](https://flatfile.com/blog/what-is-a-csv-file-guide-to-uses-and-benefits/#:~:text=csv%20file%20extension%20stands%20for,as%20data%20separated%20by%20commas.)
+that will allow easier observation for future analysis. 
+One thing we are forgetting is the csv file headers, in this case, I've created them manually based on the order of the rows from the initial web page we scraped. 
+```python
+maintableHeaders = ['MunicipalityName','HumanSettlementType','MunicipalityCounty','2020Population',
+                    '2010Population','PopulationChange',
+                    'SquareMiles','SquareKilometers','PopulationDensity','DateIncorporated']
+```
+Finally, we create a brand new csv file, allocate our variables into it, and download it. 
+```python
+df = pd.DataFrame(data=allMunicipalities,columns=maintableHeaders)
+resultFile = "CaliforniaMunicipalities.csv"
+df.to_csv(resultFile,index=False)
+```
+And just like that ladies and gentlemen, we extact a table from Wikipedia. 
+
+
+
 
 
 
