@@ -109,7 +109,7 @@ The result is the following:
   '545.8/sq mi (210.7/km2)',
   'November 27, 1991']]
 ```
-Now that we have every row within the table broken down, we need to allocate it into a [csv](https://flatfile.com/blog/what-is-a-csv-file-guide-to-uses-and-benefits/#:~:text=csv%20file%20extension%20stands%20for,as%20data%20separated%20by%20commas.)
+Now that we have every row within the table broken down, we need to allocate it into a [csv](https://flatfile.com/blog/what-is-a-csv-file-guide-to-uses-and-benefits/#:~:text=csv%20file%20extension%20stands%20for,as%20data%20separated%20by%20commas./)
 that will allow easier observation for future analysis. 
 One thing we are forgetting is the csv file headers, in this case, I've created them manually based on the order of the rows from the initial web page we scraped. 
 ```python
