@@ -51,20 +51,20 @@ Now, once we find the source of the raw datum, we extract it:
 
 ```python
 municipalities = []
-for muni in range(len(tablerows)):
+for muni in range(len(tablerows)): # Part 1
   municipalityRaw = [tablerows[muni].find_all('th'),tablerows[muni].find_all('td')]
   municipalityAtt = []
-  for i in municipalityRaw[0]:
+  for i in municipalityRaw[0]: # Part 2
     x = i.text[:-1]
     if x[-1].isalpha() == False:
       municipalityAtt.append(x[:-1])
     else:
       municipalityAtt.append(x)
-  for rest in municipalityRaw[1]:
-    if "\xa0" in rest.text:
+  for rest in municipalityRaw[1]: # Part 3
+    if "\xa0" in rest.text: $ Part 4
       newString = rest.text.replace('\xa0', ' ')
       municipalityAtt.append(newString[:-1])
-    elif municipalityRaw[1].index(rest) == 4:
+    elif municipalityRaw[1].index(rest) == 4: # Part 5
       if rest.text[0] == "-":
         newString = f"({rest.text[:-2]})"
         municipalityAtt.append(newString)
@@ -72,7 +72,7 @@ for muni in range(len(tablerows)):
         municipalityAtt.append(rest.text[1:-2])
     else:
       municipalityAtt.append(rest.text[:-1])
-  municipalities.append(municipalityAtt)
+  municipalities.append(municipalityAtt) # Part 6
 ```
 Let me break this down:
 
