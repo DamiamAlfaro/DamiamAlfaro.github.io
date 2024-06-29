@@ -31,3 +31,5 @@ print(element.text)
 ```python3
 Found 652 bids
 ```
+Websites Used:
+[Scrolling Down with Selenium](https://stackoverflow.com/questions/20986631/how-can-i-scroll-a-web-page-using-selenium-webdriver-in-python)
