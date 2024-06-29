@@ -31,5 +31,26 @@ print(element.text)
 ```python3
 Found 652 bids
 ```
+Now that we know that we can interact with the webpage, we need to find our crux, where we ought to focus on, which in this case
+is each individual bids. Thing is that each bid is found within a <tr> element, therefore we have to go over each of the
+layers and find each individual <tr>:
+```python3
+# Tabulation of bids
+start = driver.find_element(By.ID,"ember20")
+
+firstclass = start.find_element(By.CLASS_NAME,"table-overflow-container")
+
+tabulationStart = firstclass.find_elements(By.TAG_NAME,"table")
+
+selectedTableElement = tabulationStart[1]
+
+tableBody = selectedTableElement.find_element(By.TAG_NAME,"tbody")
+
+bidsTable = tableBody.find_elements(By.TAG_NAME,"tr")
+```
+
+
+
+
 Websites Used:
 [Scrolling Down with Selenium](https://stackoverflow.com/questions/20986631/how-can-i-scroll-a-web-page-using-selenium-webdriver-in-python)
