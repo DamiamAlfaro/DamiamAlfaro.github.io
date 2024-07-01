@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Deeper Webscraping"
+title: "Planetbids Webscraping"
 date: 2024-06-27 10:00:00 -0000
 categories: blog
 ---
