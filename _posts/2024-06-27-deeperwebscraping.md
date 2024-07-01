@@ -38,7 +38,7 @@ layers and find each individual <tr>:
 # Tabulation of bids
 start = driver.find_element(By.ID,"ember20")
 
-firstclass = start.find_element(By.CLASS_NAME,"table-overflow-container")
+current_bids = start.find_element(By.CLASS_NAME,"table-overflow-container")
 
 tabulationStart = firstclass.find_elements(By.TAG_NAME,"table")
 
@@ -46,11 +46,45 @@ selectedTableElement = tabulationStart[1]
 
 tableBody = selectedTableElement.find_element(By.TAG_NAME,"tbody")
 
+# Only displays the first 30
 bidsTable = tableBody.find_elements(By.TAG_NAME,"tr")
+```
+This code allow us to visualize which bids we have, but there is one problem: some planetbids portals have multiple
+bids post and not just the first default 30 showed in the main page. 
+```python3
+bidsTable = tableBody.find_elements(By.TAG_NAME,"tr")
+print(len(bidsTable))
+```
+```
+32
+```
+Why 32? Because there are two tabulations (tr elements) that are counted as tr elements, the header and subheader. Afterwards
+the first 30 bids start to display.
+In order to solve this issue we will need to [scroll down](https://stackoverflow.com/questions/20986631/how-can-i-scroll-a-web-page-using-selenium-webdriver-in-python) using
+selenium's method. However, keep in mind that we need to scroll down not in the webpage itself, but in the table container, as in the case of planetbids website design it is
+the table element that contains all of the bids, thereby the element to scroll down within. Let's create a function to do so:
+```python3
+# Scrolls down within the table container
+def scroll_table_container(container, scroll_pause_time=1):
+    last_height = driver.execute_script("return arguments[0].scrollHeight", container)
+    
+    while True:
+        # Scroll down by a small amount within the container
+        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", container)
+        
+        # Wait to load the new content
+        time.sleep(scroll_pause_time)
+        
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return arguments[0].scrollHeight", container)
+        if new_height == last_height:
+            break
+        last_height = new_height
+```
+This function takes the table container as a input:
+```python3
+current_bids = start.find_element(By.CLASS_NAME,"table-overflow-container")
 ```
 
 
 
-
-Websites Used:
-[Scrolling Down with Selenium](https://stackoverflow.com/questions/20986631/how-can-i-scroll-a-web-page-using-selenium-webdriver-in-python)
