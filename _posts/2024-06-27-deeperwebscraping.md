@@ -36,24 +36,18 @@ is each individual bids. Thing is that each bid is found within a <tr> element, 
 layers and find each individual <tr>:
 ```python3
 # Tabulation of bids
-start = driver.find_element(By.ID,"ember20")
+total_bids = driver.find_element(By.CLASS_NAME,"bids-table-filter-message") # int
 
 current_bids = start.find_element(By.CLASS_NAME,"table-overflow-container")
 
-tabulationStart = firstclass.find_elements(By.TAG_NAME,"table")
-
-selectedTableElement = tabulationStart[1]
-
-tableBody = selectedTableElement.find_element(By.TAG_NAME,"tbody")
-
 # Only displays the first 30
-bidsTable = tableBody.find_elements(By.TAG_NAME,"tr")
+bids = current_bids.find_elements(By.TAG_NAME,"tr") # int
 ```
 This code allow us to visualize which bids we have, but there is one problem: some planetbids portals have multiple
 bids post and not just the first default 30 showed in the main page. 
 ```python3
-bidsTable = tableBody.find_elements(By.TAG_NAME,"tr")
-print(len(bidsTable))
+bids = current_bids.find_elements(By.TAG_NAME,"tr") # int
+print(len(bids))
 ```
 ```
 32
@@ -85,6 +79,13 @@ This function takes the table container as a input:
 ```python3
 current_bids = start.find_element(By.CLASS_NAME,"table-overflow-container")
 ```
-
+Now that we have all our bids acknowledged, we can interact with each '<tr>' element and begin scraping from it:
+```python3
+bids = current_bids.find_elements(By.TAG_NAME,"tr")
+print(len(bids))
+```
+```python3
+652
+```
 
 
