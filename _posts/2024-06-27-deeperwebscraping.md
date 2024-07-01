@@ -75,7 +75,7 @@ def scroll_table_container(container, scroll_pause_time=1):
             break
         last_height = new_height
 ```
-This function takes the table container as a input:
+This function takes the table container as input:
 ```python3
 current_bids = start.find_element(By.CLASS_NAME,"table-overflow-container")
 ```
