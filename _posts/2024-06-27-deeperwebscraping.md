@@ -91,6 +91,9 @@ However, we are going to proceed with a different approach now. The reason for t
 I am currently using a general collective conventional wifi provider, which limites the power of loading, refreshing, and
 updating webpages at the optimal level. Nevertheless, each obstacle in life is a test to ourselves (and our versitality) in order
 to observe if one can land in one's feet. One should always be capable of doing so, our versitality should always be up to date. Why?
-The volatility of life is ruthless; landing on one's feet is the only ability that will secure safety on the face of adversity.
+The volatility of life is ruthless; landing on one's feet is the only ability that will secure safety on the face of adversity. We are
+going to be creating a function for each of the tabs found in each bid <tr> item, and loop through all bids <tr> items in chunks
+of 10. Sure, this will be time consuming but functional nonetheless. In my contemporary world time is the most expensive and valuable
+asset that money can buy. I am not quite there yet...
 
 
