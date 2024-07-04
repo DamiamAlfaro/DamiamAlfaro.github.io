@@ -95,5 +95,6 @@ The volatility of life is ruthless; landing on one's feet is the only ability th
 going to be creating a function for each of the tabs found in each bid <tr> item, and loop through all bids <tr> items in chunks
 of 10. Sure, this will be time consuming but functional nonetheless. In my contemporary world time is the most expensive and valuable
 asset that money can buy. I am not quite there yet...
+![PlanetbidsBidHeader](/assets/images/planetbids_header.png)
 
 
