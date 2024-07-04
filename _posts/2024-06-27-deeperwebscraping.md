@@ -87,97 +87,10 @@ print(len(bids))
 ```python3
 652
 ```
-Now that we have access to every single bid within the tabulation, we can jump right into each bid to start scraping.
-First, we will get the general information: i.e. Bid date, bid time, bid amount, scope of work, bid title, etc.
-```python3
-# Input: bids list after scroll and each's general information
-def getting_bid_general_information(self):
-	bids_general_info = []
-	for index in range(len(self)):
-		try:
-			# We need to refer to the initial bid tabulation each time in order to forbid
-			# going astray
-			current_bids = driver.find_element(By.CLASS_NAME,"table-overflow-container")
-			bids = current_bids.find_elements(By.TAG_NAME,"tr")[2:4]
-
-			# Just checking you know
-			print(f"{index}: {bids[index].text}")
-
-			# Clicks every <tr> element within the tabulation in the main page
-			bids[index].click()
-
-			# This is just a signal that checks if the click() was successful
-			# The 'h3' is the first printable element found in the clicked tab
-			WebDriverWait(driver,10).until(EC.presence_of_element_located((By.TAG_NAME,"h3")))
-			try:
-				# Apparently this is where all general info text is found...
-				element = driver.find_element(By.CLASS_NAME,"bid-detail-wrapper")
-
-				# Storing them into a list	
-				bids_general_info.append(element.text.split("\n"))
-
-			# We want to see if something is wrong without stoping the code, right?
-			except Exception as exc:
-				print("\n!!!")
-				print("\nThere is something wrong with reading the general info\n")
-				print("\n!!!\n")
-				print(exc)
-
-			# Remember that we need to go back for the next iteration to work
-			driver.back()
-
-			# Again, this is to check that each action worked
-			WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CLASS_NAME,'table-overflow-container')))
-		except Exception as exe:
-			print("\nThere is something wrong with getting_bid_general_information\n")
-
-	# The list that will later be use for analysis
-	return bids_general_info
-```
-The idea is to use the list it returns and store it into a csv.
-Now we extract each bid line items in order to analyse patterns later on:
-```python3
-# Input: bid line items
-def getting_bid_line_items(self):
-
-	# Where bid line items will be stored separated by a "\n"
-	bids_line_items = []
-	for index in range(len(self)):
-		try:
-			current_bids = driver.find_element(By.CLASS_NAME,"table-overflow-container")
-			bids = current_bids.find_elements(By.TAG_NAME,"tr")[2:4]
-			print(f"{index}: {bids[index].text}")
-
-			# Clicks a bid <tr> element
-			bids[index].click()
-
-			# This is just a signal to make sure the click() worked
-			WebDriverWait(driver,10).until(EC.presence_of_element_located((By.TAG_NAME,"h3")))
-
-			# Why "try"? Because we are trying to collect every bid data, we want to be notified 
-			# in case of any issues without breaking the code mon ami...
-			try:
-				# 
-				element = driver.find_element(By.CLASS_NAME,"bidLineItems")
-				element.click()
-				element2 = driver.find_element(By.CLASS_NAME,"bid-line-items")
-				bids_line_items.append(element2.text.split("\n"))
-
-			except Exception as exc:
-				print("\n!!!")
-				print("\nThere is something wrong with getting the line items")
-				print("\n!!!\n")
-				print(exc)
-
-			# Double because we are clicking twice; basically, every click(), one back()
-			driver.back()
-			driver.back()
-			WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CLASS_NAME,'table-overflow-container')))
-		except Exception as exe:
-			print("\nThere is soemthing wrong with getting_bid_line_items")
-
-	return bids_line_items
-```
-
+However, we are going to proceed with a different approach now. The reason for this is due to the limitations of my poor wifi power.
+I am currently using a general collective conventional wifi provider, which limites the power of loading, refreshing, and
+updating webpages at the optimal level. Nevertheless, each obstacle in life is a test to ourselves (and our versitality) in order
+to observe if one can land in one's feet. One should always be capable of doing so, our versitality should always be up to date. Why?
+The volatility of life is ruthless; landing on one's feet is the only ability that will secure safety on the face of adversity.
 
 
