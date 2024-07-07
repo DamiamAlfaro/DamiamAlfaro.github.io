@@ -4,6 +4,8 @@ title: "Planetbids Webscraping"
 date: 2024-06-27 10:00:00 -0000
 categories: blog
 ---
+### Project: [planetbids_extraction.ipynb](https://github.com/DamiamAlfaro/Europe-WeSonder/tree/main/DataSources/Planetbids)
+
 In order to extend the data bank for [WeSonder](https://wesonder.com/) (thereby increasing its accuracy and reliance) we ought to increase the sources of what that data is extracted from, 
 and when it comes of construction, a great source of users and entities is [Planetbids](https://home.planetbids.com/).
 The problem is that unlike my [prior post](https://damiamalfaro.github.io/blog/2024/06/25/CaliforniaMunicipalities.html), Planetbids cannot be scraped by solely [BeautifulSoup](https://beautiful-soup-4.readthedocs.io/en/latest/). You see,
