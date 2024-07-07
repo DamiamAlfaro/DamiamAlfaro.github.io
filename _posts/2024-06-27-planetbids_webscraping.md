@@ -114,4 +114,6 @@ import time
 url = "https://vendors.planetbids.com/portal/28159/bo/bo-search"
 initial_csv_file = 'testing.csv'
 ```
+By the way, I decided to change my strategy for tackling this paradigm: I will be scraping one <tr> element at a time, with all aforementioned attributes. I know it will most likely take
+more time, but it will save time for errors and perhaps be continous; i.e. it will not halt for the entirity of the running code. Let me show you.
 
