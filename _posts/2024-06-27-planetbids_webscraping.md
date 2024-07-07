@@ -96,6 +96,22 @@ going to be creating a function for each of the tabs found in each bid <tr> item
 of 10. Sure, this will be time consuming but functional nonetheless. In my contemporary world time is the most expensive and valuable
 asset that money can buy. I am not quite there yet...
 ![PlanetbidsBidHeader](/assets/images/planetbids_header.png)
-
 From now on we are going to be using [Jupyter Notebooks](https://docs.jupyter.org/en/latest/) in order to better visualize our progress and procedures.
+I will leave the above's explanations as they are quite useful for someone who is just learning about webscraping, but from now on I will be sharing my procedures
+exactly as how they were implemented along with their reasoning.
+First of all, we will be importing multiple modules from selenium and assigning our testing website. 
+```python3
+import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+import time
+```
+```python3
+url = "https://vendors.planetbids.com/portal/28159/bo/bo-search"
+initial_csv_file = 'testing.csv'
+```
 
