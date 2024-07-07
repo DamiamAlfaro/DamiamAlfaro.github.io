@@ -97,4 +97,5 @@ of 10. Sure, this will be time consuming but functional nonetheless. In my conte
 asset that money can buy. I am not quite there yet...
 ![PlanetbidsBidHeader](/assets/images/planetbids_header.png)
 
+From now on we are going to be using [Jupyter Notebooks](https://docs.jupyter.org/en/latest/) in order to better visualize our progress and procedures.
 
