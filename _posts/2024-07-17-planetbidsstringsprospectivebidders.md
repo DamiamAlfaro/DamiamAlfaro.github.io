@@ -23,4 +23,5 @@ In this however, we are not talking about linguistic language per se, but about 
 in the field of computer science is a paradigm that has aid programmers throughout decades. The way we call the action of pinpointing an object in computer science is
 [Indexing](https://pandas.pydata.org/docs/user_guide/indexing.html). This paradigm is vital for the life of a programmer. 
 
-
+The beauty about programming, and specifically about data science is that with the right tools, anything at all can be extracted as a datum. 
+If it exist as a visual data point, one can access it with programming. As long as it exist in the display of a computer, it can be accessible. With the paradigm of [Web Scraping](https://en.wikipedia.org/wiki/Web_scraping), the the world wide web, and anything within it becomes an extractable datum. The world wide web thereby becomes the biggest data base known to man.
