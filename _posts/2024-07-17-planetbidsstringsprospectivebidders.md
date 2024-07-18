@@ -4,6 +4,9 @@ title: "Pinpoint"
 date: 2024-07-17 10:00:00 -0000
 categories: blog
 ---
+
+Program: [A.ipynb](https://github.com/DamiamAlfaro/Earth-Prototypes/blob/main/Asia/AutomationMacros/A_A.bas)
+
 In the field of computer science and mathematics, and perhaps any expertise, can be mastered by a human with one single action: pinpointing.
 
 The action of pinpointing can be described using as an adjective, and a verb:
