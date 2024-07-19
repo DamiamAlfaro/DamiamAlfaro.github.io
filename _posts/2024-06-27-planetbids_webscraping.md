@@ -363,7 +363,7 @@ These elements are higher in the hierarchy of importance: the questions particip
                         except Exception as exe:
                             bid_addenda.append(["No Addenda",0])
                     else:
-                        print(f"{i.text} is acting like a bitch")
+                        pass
             except:
                 
                 # There are bids with no addenda/emails
@@ -371,4 +371,99 @@ These elements are higher in the hierarchy of importance: the questions particip
                 bid_addenda.append(["No Addenda",0])
 ```
 
-There is something
+After the reposition and assurance of it, we search for the class elements *"accordion"*. 
+
+![accordion_example1](/assets/images/planetbids_extraction_image5.png)
+
+The CSS elements [accordions](https://www.w3schools.com/w3css/w3css_accordions.asp) are an interactive element that when clicked, displays information below it, if clicked again, the information encloses once again, just as their name states, the resemble an accordion. In this example, as we click each of the accordions, the elements opens and displays the text found within it.
+
+![accordion_example2](/assets/images/planetbids_extraction_image6.png) 
+
+Usually, one can pinpoint an accordion CSS element by accordion icons that indicate the element being closed or open:
+
+![accordion_example3](/assets/images/planetbids_extraction_image7.png)
+
+Once we open each of the accordion elements, we extract their text and stratify it using the *split()* method in order to analyse each of the rows. 
+
+### Sixth Stage: Q&As
+
+Similar to the Addenda/Email stage, Q&As are displayed as an accordion: 
+
+```python3
+    '''
+    Q&A
+    '''
+    try:
+        # Reposition towards the Q&A section
+        try:
+            WebDriverWait(driver,10).until(
+                EC.presence_of_element_located((By.CLASS_NAME,"bidQandA"))
+            )
+
+            try:
+                # Assure there are questions sets
+                q_and_a_tab = driver.find_element(By.CLASS_NAME,"bidQandA")
+                q_and_a_tab.click()
+                WebDriverWait(driver,20).until(
+                    EC.presence_of_element_located((By.CLASS_NAME,"bid-q-and-a-question"))
+                )
+                try:
+                    # Position yourself on the tabulation of question
+                    q_and_a_display = driver.find_element(By.CLASS_NAME,"bid-detail-wrapper")
+        
+                    # Count total question sets
+                    question_sets = q_and_a_display.find_elements(By.CLASS_NAME,"bid-q-and-a-question") # int (total question sets)
+        
+                    # Locate buttoms
+                    q_and_a_buttoms = q_and_a_display.find_elements(By.CLASS_NAME,"soft-blue-xs-btn")
+        
+                    # Locate "Expand All" buttom
+                    expand_button = WebDriverWait(driver, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, "//button[text()='Expand All' and contains(@class, 'soft-blue-xs-btn')]"))
+                    )
+    
+                    # Click buttom
+                    expand_button.click()
+    
+                    # Assure its functionality
+                    bid_questions_in_q_and_a = WebDriverWait(driver,20).until(
+                        EC.presence_of_all_elements_located((By.CSS_SELECTOR,".question-submenu"))
+                    )
+
+                    # Now you can retrieve the text of the Q&As
+                    try:
+                        for bid_q_and_a_question in bid_questions_in_q_and_a:
+                            bid_q_and_a.append(bid_q_and_a_question.text)
+                    except Exception as exe:
+                        print("Q&A extraction did not work")
+                        print(exe)
+                        bid_q_and_a.append("No questions")
+                except:
+                    print("Buttom did not executed perhaps?")
+                    bid_q_and_a.append("No questions")
+                
+            except:
+                # Continue if not
+                variable = "There is zero questions"
+                bid_q_and_a.append([letter for letter in variable])
+
+        except TimeoutException:
+            bid_q_and_a.append("No questions")
+    
+    except:
+        print(f"Problem with the bid Q&A at {targeted_bids.text}")
+        bid_q_and_a.append("No questions")
+```
+However, the only difference here is that each of the sets containing questions have two accordions, one for the opening of the set, and other(s) for the question itself. 
+
+![accordion_example4](/assets/images/planetbids_extraction_image8.png)
+
+Another different approach we use here is the use of the *Expand All* buttom, which is a CSS feature that automatically expands all accordion elements found within its reach. [See example here](https://codepen.io/AndreasFrontDev/pen/zBZZvq). Not only we do that differently but instead of collecting all text found within the accordions and spliting it by *"\n"* we collect each of the [css text margins](https://www.w3schools.com/css/css_margin.asp) found in each accordion element, which in this case happens to be the CSS_SELECTOR *.question-submenu*. The *EC.presence_of_all_elements_located(element)* is a similar feature of *driver.find_elements(element)*. Both become lists containing the elements specified. 
+
+### Seventh Stage: Prospective Bidders
+
+
+
+
+
+
