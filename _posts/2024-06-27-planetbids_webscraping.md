@@ -370,3 +370,5 @@ These elements are higher in the hierarchy of importance: the questions particip
                 print("No Addenda nor Emails")
                 bid_addenda.append(["No Addenda",0])
 ```
+
+There is something
