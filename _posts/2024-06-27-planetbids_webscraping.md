@@ -97,6 +97,8 @@ I will leave the above's explanations as they are quite useful for someone who i
 exactly as how they were implemented along with their reasoning.
 First of all, we will be importing multiple modules from selenium and assigning our testing website. 
 
+### Explanation Onset
+
 ```python3
 import sys
 import pandas as pd
@@ -112,10 +114,87 @@ import time
 
 ```python3
 url = "https://vendors.planetbids.com/portal/28159/bo/bo-search"
-initial_csv_file = 'testing.csv'
 ```
-By the way, I decided to change my strategy for tackling this paradigm: I will be scraping one <tr> element at a time, with all aforementioned attributes. I know it will most likely take
-more time, but it will save time for errors and perhaps be continous; i.e. it will not halt for the entirity of the running code. Let me show you.
+We will be using the city of rialto as an example as I recently won a project for my current employeer in that municipality. 
 
-Finishing up, expect it soon...
+Anyway, as describe above, the first step is to build the function that will scroll down the <table> element within the planet bids portal:
+
+![table element screenshot](/assets/images/planetbids_extraction_image1.png)
+
+As you can see, this <table> element is found within the webpage; the element contains 652 <tr> elements, each of which representing a separate link for a new tab containing a different bid (which we want to scrap). However, as explained before, the function *scroll_table_container()* does the automatic job for us for exchange of a few seconds, fair deal. 
+
+```python3
+def scroll_table_container(container, driver,scroll_pause_time=1):
+    
+    last_height = driver.execute_script("return arguments[0].scrollHeight", container)
+    
+    while True:
+        # Scroll down by a small amount within the container
+        driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", container)
+        
+        # Wait to load the new content
+        time.sleep(scroll_pause_time)
+        
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return arguments[0].scrollHeight", container)
+        if new_height == last_height:
+            break
+        last_height = new_height
+```
+However, before commencing with the heavy machinery, let's raise the question: what are we looking for here? In a short paragraph, what we are looking for in this program is to extract seven attributes (if applicable) from each bid:
+1. Bid Information: address, date, scope of work, estimated value, bid number, duration, among other attributes of lesser hierarchy.
+2. Line items: the items that, according to the [Awarding body](https://www.dir.ca.gov/public-works/awarding-bodies.html), are the items that has to be included in the project, or in another words: the scope of work of the project broken down detaily using Unit Of Measures (Square Feet, Linear Feet, Cubic Yards, etc.), Lump Sum items, and/or [alternatives](https://www.minnstate.edu/system/finance/facilities/design-construction/pm_emanual/doc/CD.50%20Bid%20Alternates%209-20-19.pdf).
+3. Documents: the provided documents by the awarding body (e.g. Project plans, project technical specifications, geotechnical reports, etc.)
+4. Addenda/Emails: any [addenda](https://en.wikipedia.org/wiki/Addendum) or email notifications from the bid and their dates.
+5. Q&A: any questions that prospective bidders might've asked before the bid due date (they provide insight on how confusing each of the trait is).
+6. Prospective Bidder: who was/is interested in this project? Along with their respective information (address, email, phone number, name, contact, etc.)
+7. Bid Results: final bidders that posted a bid for the project, their subcontractors (if available; not always revealed), and their line items (if available; not always revealed).
+
+![bid results seven attributes](/assets/images/planetbids_extraction_image2.png)
+
+With that being set, let's begin: 
+
+### First Stage: Set up
+
+```python
+def extraction(url,number):
+    beacon = 0
+    beacon += number
+
+    # Start Selenium's webdriver
+    driver = webdriver.Chrome()
+    driver.get(url)
+    time.sleep(10)
+
+    # Identifies if the total number of bids in the municipality increased
+    total_bids = driver.find_element(By.CLASS_NAME,"bids-table-filter-message")
+
+    # Table container with all bids in the municipality's planetbids portal
+    current_bids = driver.find_element(By.CLASS_NAME,"table-overflow-container")
+
+    # Scroll through the table container
+    scroll_table_container(current_bids,driver)
+    driver.implicitly_wait(40)
+
+    # After scrolling, we put all bids in the webpage into a list; n bids
+    bids = current_bids.find_elements(By.TAG_NAME,"tr")
+
+    # Output
+    bid_general_info = []
+    bid_line_items = []
+    bid_documents = []
+    bid_addenda = []
+    bid_q_and_a = []
+    bid_prospective_bidders = []
+    bid_results = []
+```
+The first stage is to set up the [Selenium WebDriver](https://www.selenium.dev/documentation/webdriver/), which is our main motor to navigate the website. The varibale *beacon* will serve as a signaling position within the <table> element, e.g. beacon = 19, that means that the targeted bid is the 19th <tr> element within the aforementioned <table> element. The class element *bids-table-filter-message* displays the text message of the total bids found within the website, which is an useful datum as it will eventually signal an addition of a new bid as we iterate the program. 
+
+![total current bids](/assets/images/planetbids_extraction_image2.png)
+
+Next is the <table> element that we've mentioned quite frequently by now, to which we apply the aforementioned *scroll_table_container()* function and scroll through it. The following logical step is to pinpoint all found <tr> elements into a list in order to iterate through them. Lastly for this stage, we create the lists that will contain our main seven attributes we want to extract that were mentioned previously. 
+
+### Second Stage: General Information
+
+
 
