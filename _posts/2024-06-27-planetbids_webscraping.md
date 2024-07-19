@@ -196,5 +196,52 @@ Next is the <table> element that we've mentioned quite frequently by now, to whi
 
 ### Second Stage: General Information
 
+```python3
+    '''
+    General info
+    '''
+    try:
+        # Assuring stability
+        table_container = WebDriverWait(driver,10).until(
+            EC.presence_of_element_located((By.CLASS_NAME,"bids-table-container"))
+        )
+    
+        current_bids = WebDriverWait(driver,10).until(
+            EC.presence_of_element_located((By.CLASS_NAME,"table-overflow-container"))
+        )
+    
+        # The <tr> element we seek
+        targeted_bids = bids[beacon+2]
+    
+        # Once acknowledged, pinpoint it and click on it, aka open it
+        driver.execute_script("arguments[0].scrollIntoView();",targeted_bids)
+        time.sleep(2)
+        print(targeted_bids.text)
+        driver.execute_script("arguments[0].click();",targeted_bids)
+        
+        # Make sure the element was clicked
+        WebDriverWait(driver,10).until(
+                EC.presence_of_element_located((By.CLASS_NAME,"bid-detail-wrapper"))
+            )
+    
+        # Pinpoint the general info
+        general_info = driver.find_element(By.CLASS_NAME,"bid-detail-wrapper")
+    
+        # Append the general info into the list
+        bid_general_info.append(general_info.text.split("\n"))
+            
+        driver.implicitly_wait(1)
+    except:
+        print(f"Problem with the general information at {targeted_bids.text}")
+        sys.exit(1)
+
+```
+We are using [try & except](https://docs.python.org/3/tutorial/errors.html) statements since we do not want to halt the program if an error for a single tab has ocurred: keep in mind that this program is intended to be executed through long period of times: there are **483** municipalities in California, each of them having one or more planetbids portals.
+Beginning with the *targeted_bids* variable: as mentioned above, we will singularly target a bid (aka <tr> element) and extract from it every single interation. It is worth mentioning that I tried iterating through multiple <tr> elements within the same WebDriver session, but the code would halt or produce many errors. Why? My internet is that of the [middle class](https://fox5sandiego.com/news/california-news/heres-how-much-you-have-to-earn-in-california-to-qualify-as-middle-class-study-says/#:~:text=In%20California%2C%20the%20middle%2Dclass,it%20was%20%2440%2C933%20to%20%24122%2C800.), not as powerful as the upperclass, but nevertheless enough and scant for what I want to achieve. Or perhaps I am wrong and *cuando la partera es mala le echa la culpa al culo*. I'd go for the former narrative.
+The reason for the *+2* in the *targeted_bids* variable is due to the first two items found within the <tr> list *bids* in the first stage: they are basically the headers of the table, and an empty *\n*. 
+Once the targeted <tr> element is identified, we 1) scroll into view onto the element, and 2) click on it. We need to scroll into view since the *scroll_table_container()* function iterates until the bottom of the <table> element (variable *bids*), which forces us to scroll back to our *targeted_bids* <tr> element. 
+After clicking on the desired bid, we find ourselves in our intended extraction location: the general information tab. We assure stability within it by checking the element class *"bid-detail-wrapper"*, in where we proceed by extracting the page (general information) text splited by *"\n"* in order to pinpoint each of the repeating items that we will utilize to locate important attributes within the general information. 
+
+### Third Stage: Line Items
 
 
