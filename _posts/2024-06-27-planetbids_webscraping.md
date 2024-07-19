@@ -190,7 +190,7 @@ def extraction(url,number):
 ```
 The first stage is to set up the [Selenium WebDriver](https://www.selenium.dev/documentation/webdriver/), which is our main motor to navigate the website. The varibale *beacon* will serve as a signaling position within the <table> element, e.g. beacon = 19, that means that the targeted bid is the 19th <tr> element within the aforementioned <table> element. The class element *bids-table-filter-message* displays the text message of the total bids found within the website, which is an useful datum as it will eventually signal an addition of a new bid as we iterate the program. 
 
-![total current bids](/assets/images/planetbids_extraction_image2.png)
+![total current bids](/assets/images/planetbids_extraction_image3.png)
 
 Next is the <table> element that we've mentioned quite frequently by now, to which we apply the aforementioned *scroll_table_container()* function and scroll through it. The following logical step is to pinpoint all found <tr> elements into a list in order to iterate through them. Lastly for this stage, we create the lists that will contain our main seven attributes we want to extract that were mentioned previously. 
 
