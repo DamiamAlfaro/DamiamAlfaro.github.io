@@ -156,7 +156,7 @@ With that being set, let's begin:
 
 ### First Stage: Set up
 
-```python
+```python3
 def extraction(url,number):
     beacon = 0
     beacon += number
