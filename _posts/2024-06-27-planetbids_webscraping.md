@@ -244,4 +244,129 @@ After clicking on the desired bid, we find ourselves in our intended extraction 
 
 ### Third Stage: Line Items
 
+```python3
+    '''
+    Line Items
+    '''
+    try:
+        try:
+            WebDriverWait(driver,10).until(
+                EC.presence_of_element_located((By.CLASS_NAME,"bidLineItems"))
+            )
+            # Pinpoint the line items tab element
+            line_items_tab = driver.find_element(By.CLASS_NAME,"bidLineItems")
+        
+            # Click the element
+            line_items_tab.click()
+        
+            # Assure the table was found
+            WebDriverWait(driver,10).until(
+                EC.presence_of_element_located((By.CLASS_NAME,"bid-line-items"))
+            )
+        
+            # Pinpoint the table containing the line items
+            line_items = driver.find_element(By.CLASS_NAME,"bid-line-items")
+        
+            # Materialize the line items into strings and append them respectively
+            bid_line_items.append(line_items.text.split("\n"))
+            driver.implicitly_wait(2)
+        except TimeoutException:
+            print("No Line items")
+            bid_line_items.append(["No Line Items",0])
+    except:
+        print(f"Problem with the line items at {targeted_bids.text}")
+        bid_line_items.append(["No Line Items",0])
+```
+After collecting the General Information (first tab), the next step is to proceed towards the second attribute: Line Items. The function *WebDriverWait* will be repeating itself quite frequently due to its importance on assuring stability after a click() change. In order to reposition ourselves from the General Information tab to the Line Items tab, first we need to acknowledge the tab element name, which in this case happens to be the class element *"bidLineItems"*. The reason for the double *try/except* statements is due to the Line Items tab being absent from some bids. Once we *click()* into the Line Items tab we seek for the table containing the line items. Similar to the initial <table> element in the initial webpage, in the Line Item Tab we have another <table> elements containing the line items. However, in this case we are not required to scroll down using the *scroll_table_container()* function since the <table> element is part of the Line Item Page, and not an attribute of it as is the case with the main initial page. 
 
+![line item table](/assets/images/planetbids_extraction_image4.png)
+
+Lastly, the exceptions append a list to our *bid_line_items* list in case the *bidLineItems* was not found. 
+
+### Fourth Stage: Bid Documents
+
+You might ask, "why are the documents important?", well, honestly they are the lowest in the hierarchy of importance, but nevertheless play a crucial role by providing patterns of documentation provided by the awarding body. Some projects might only include plans and specs, others include the geotechnical report, perhaps the projects that include document X always include trait Y? That will be discovered in the Second Stage of WeSonder. 
+
+```python3
+    '''
+    Documents
+    '''
+    try:
+        documents_tab = driver.find_element(By.CLASS_NAME,"bidDocs")
+        documents_tab.click()
+        try:
+            WebDriverWait(driver,10).until(
+                EC.presence_of_element_located((By.CLASS_NAME,"table-overflow-container"))
+            )
+            documents = driver.find_element(By.CLASS_NAME,"table-overflow-container")
+            
+            bid_documents.append(documents.text.split('\n'))
+                
+            driver.implicitly_wait(1)
+        except TimeoutException:
+            print("No Documents")
+            bid_documents.append(["No Documents",0])
+        
+    except:
+        print(f"Problem with the bid documents at {targeted_bids.text}")
+        bid_documents.append(["No Documents",0])
+```
+Similar to *bidLineItems*, we reposition ourselves in the *bidDocs* tab and click on it, just to wait afterwards using WebDriverWait. Since we just want the strings (text) of the title of the documents, all we need is the *.text* element, we do not need the documents that are available within each document element as it would not only flood my mac with tons and tons of meomry heavy documents, but also become unnessesary. We could analyse the documents further and find patterns there, but that is the purpose for another function of Idiosyncrasy.
+
+### Fifth Stage: 
+
+These elements are higher in the hierarchy of importance: the questions participants ask and the responses the awarding body provide reveal relevant information not only of the project, but of the psychology and language of the participants and the awarding body.
+
+```python3
+'''
+    Addenda/Emails
+    '''
+    try:
+        # Reposition to the next tab
+        addenda_tab = driver.find_element(By.CLASS_NAME,"bidAddendaAndEmails")
+        addenda_tab.click()
+
+        # Did the click worked?
+        try:
+            WebDriverWait(driver,20).until(
+                EC.presence_of_element_located((By.CLASS_NAME,"section-heading"))
+            )
+            
+            # If so, find each of the addenda/emails with their respective class "accordion"
+            try:
+                
+                # The length of this list is the amount of addenda/emails found
+                heading_check = driver.find_elements(By.CLASS_NAME,"accordion")
+
+                # Iterate
+                for addenda_item in heading_check:
+
+                    # These functions check whether the item (<class "accordion">) is visible and is can be interacted with
+                    if addenda_item.is_displayed() and addenda_item.is_enabled():
+                        try:
+                            WebDriverWait(driver,20).until(
+                                EC.element_to_be_clickable((By.CLASS_NAME, "accordion"))
+                            )
+
+                            # Since there could be multiple items, we need to locate to their view and click on them
+                            driver.execute_script("arguments[0].scrollIntoView();",addenda_item)
+                            WebDriverWait(driver,20).until(
+                                EC.presence_of_element_located((By.CLASS_NAME, "accordion"))
+                            )
+
+                            # Click click click click
+                            addenda_item.click()
+
+                            # Append the text of the newly opened accordion (containing the addenda/email update)
+                            bid_addenda.append(addenda_item.text.split('\n'))
+                            
+                        except Exception as exe:
+                            bid_addenda.append(["No Addenda",0])
+                    else:
+                        print(f"{i.text} is acting like a bitch")
+            except:
+                
+                # There are bids with no addenda/emails
+                print("No Addenda nor Emails")
+                bid_addenda.append(["No Addenda",0])
+```
