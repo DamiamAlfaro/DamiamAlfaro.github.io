@@ -197,19 +197,7 @@ Next is the <table> element that we've mentioned quite frequently by now, to whi
 ### Second Stage: General Information
 
 ```python3
-    '''
-    General info
-    '''
-    try:
-        # Assuring stability
-        table_container = WebDriverWait(driver,10).until(
-            EC.presence_of_element_located((By.CLASS_NAME,"bids-table-container"))
-        )
-    
-        current_bids = WebDriverWait(driver,10).until(
-            EC.presence_of_element_located((By.CLASS_NAME,"table-overflow-container"))
-        )
-    
+
         # The <tr> element we seek
         targeted_bids = bids[beacon+2]
     
@@ -218,22 +206,14 @@ Next is the <table> element that we've mentioned quite frequently by now, to whi
         time.sleep(2)
         print(targeted_bids.text)
         driver.execute_script("arguments[0].click();",targeted_bids)
-        
-        # Make sure the element was clicked
-        WebDriverWait(driver,10).until(
-                EC.presence_of_element_located((By.CLASS_NAME,"bid-detail-wrapper"))
-            )
+
+        ...
     
         # Pinpoint the general info
         general_info = driver.find_element(By.CLASS_NAME,"bid-detail-wrapper")
     
         # Append the general info into the list
         bid_general_info.append(general_info.text.split("\n"))
-            
-        driver.implicitly_wait(1)
-    except:
-        print(f"Problem with the general information at {targeted_bids.text}")
-        sys.exit(1)
 
 ```
 We are using [try & except](https://docs.python.org/3/tutorial/errors.html) statements since we do not want to halt the program if an error for a single tab has ocurred: keep in mind that this program is intended to be executed through long period of times: there are **483** municipalities in California, each of them having one or more planetbids portals.
@@ -250,19 +230,14 @@ After clicking on the desired bid, we find ourselves in our intended extraction 
     '''
     try:
         try:
-            WebDriverWait(driver,10).until(
-                EC.presence_of_element_located((By.CLASS_NAME,"bidLineItems"))
-            )
+
             # Pinpoint the line items tab element
             line_items_tab = driver.find_element(By.CLASS_NAME,"bidLineItems")
         
             # Click the element
             line_items_tab.click()
         
-            # Assure the table was found
-            WebDriverWait(driver,10).until(
-                EC.presence_of_element_located((By.CLASS_NAME,"bid-line-items"))
-            )
+            ...
         
             # Pinpoint the table containing the line items
             line_items = driver.find_element(By.CLASS_NAME,"bid-line-items")
@@ -273,9 +248,7 @@ After clicking on the desired bid, we find ourselves in our intended extraction 
         except TimeoutException:
             print("No Line items")
             bid_line_items.append(["No Line Items",0])
-    except:
-        print(f"Problem with the line items at {targeted_bids.text}")
-        bid_line_items.append(["No Line Items",0])
+
 ```
 After collecting the General Information (first tab), the next step is to proceed towards the second attribute: Line Items. The function *WebDriverWait* will be repeating itself quite frequently due to its importance on assuring stability after a click() change. In order to reposition ourselves from the General Information tab to the Line Items tab, first we need to acknowledge the tab element name, which in this case happens to be the class element *"bidLineItems"*. The reason for the double *try/except* statements is due to the Line Items tab being absent from some bids. Once we *click()* into the Line Items tab we seek for the table containing the line items. Similar to the initial <table> element in the initial webpage, in the Line Item Tab we have another <table> elements containing the line items. However, in this case we are not required to scroll down using the *scroll_table_container()* function since the <table> element is part of the Line Item Page, and not an attribute of it as is the case with the main initial page. 
 
@@ -295,21 +268,12 @@ You might ask, "why are the documents important?", well, honestly they are the l
         documents_tab = driver.find_element(By.CLASS_NAME,"bidDocs")
         documents_tab.click()
         try:
-            WebDriverWait(driver,10).until(
-                EC.presence_of_element_located((By.CLASS_NAME,"table-overflow-container"))
-            )
-            documents = driver.find_element(By.CLASS_NAME,"table-overflow-container")
+            ...
             
             bid_documents.append(documents.text.split('\n'))
-                
-            driver.implicitly_wait(1)
-        except TimeoutException:
-            print("No Documents")
-            bid_documents.append(["No Documents",0])
-        
-    except:
-        print(f"Problem with the bid documents at {targeted_bids.text}")
-        bid_documents.append(["No Documents",0])
+
+            ...
+
 ```
 Similar to *bidLineItems*, we reposition ourselves in the *bidDocs* tab and click on it, just to wait afterwards using WebDriverWait. Since we just want the strings (text) of the title of the documents, all we need is the *.text* element, we do not need the documents that are available within each document element as it would not only flood my mac with tons and tons of meomry heavy documents, but also become unnessesary. We could analyse the documents further and find patterns there, but that is the purpose for another function of Idiosyncrasy.
 
@@ -326,30 +290,13 @@ These elements are higher in the hierarchy of importance: the questions particip
         addenda_tab = driver.find_element(By.CLASS_NAME,"bidAddendaAndEmails")
         addenda_tab.click()
 
-        # Did the click worked?
-        try:
-            WebDriverWait(driver,20).until(
-                EC.presence_of_element_located((By.CLASS_NAME,"section-heading"))
-            )
-            
-            # If so, find each of the addenda/emails with their respective class "accordion"
-            try:
+        ...
                 
                 # The length of this list is the amount of addenda/emails found
                 heading_check = driver.find_elements(By.CLASS_NAME,"accordion")
 
-                # Iterate
-                for addenda_item in heading_check:
-
-                    # These functions check whether the item (<class "accordion">) is visible and is can be interacted with
-                    if addenda_item.is_displayed() and addenda_item.is_enabled():
-                        try:
-                            WebDriverWait(driver,20).until(
-                                EC.element_to_be_clickable((By.CLASS_NAME, "accordion"))
-                            )
-
-                            # Since there could be multiple items, we need to locate to their view and click on them
-                            driver.execute_script("arguments[0].scrollIntoView();",addenda_item)
+                            ...
+                            
                             WebDriverWait(driver,20).until(
                                 EC.presence_of_element_located((By.CLASS_NAME, "accordion"))
                             )
@@ -364,11 +311,8 @@ These elements are higher in the hierarchy of importance: the questions particip
                             bid_addenda.append(["No Addenda",0])
                     else:
                         pass
-            except:
-                
-                # There are bids with no addenda/emails
-                print("No Addenda nor Emails")
-                bid_addenda.append(["No Addenda",0])
+            ...
+            
 ```
 
 After the reposition and assurance of it, we search for the class elements *"accordion"*. 
@@ -393,29 +337,10 @@ Similar to the Addenda/Email stage, Q&As are displayed as an accordion:
     '''
     Q&A
     '''
-    try:
-        # Reposition towards the Q&A section
-        try:
-            WebDriverWait(driver,10).until(
-                EC.presence_of_element_located((By.CLASS_NAME,"bidQandA"))
-            )
+            ...
 
             try:
-                # Assure there are questions sets
-                q_and_a_tab = driver.find_element(By.CLASS_NAME,"bidQandA")
-                q_and_a_tab.click()
-                WebDriverWait(driver,20).until(
-                    EC.presence_of_element_located((By.CLASS_NAME,"bid-q-and-a-question"))
-                )
-                try:
-                    # Position yourself on the tabulation of question
-                    q_and_a_display = driver.find_element(By.CLASS_NAME,"bid-detail-wrapper")
-        
-                    # Count total question sets
-                    question_sets = q_and_a_display.find_elements(By.CLASS_NAME,"bid-q-and-a-question") # int (total question sets)
-        
-                    # Locate buttoms
-                    q_and_a_buttoms = q_and_a_display.find_elements(By.CLASS_NAME,"soft-blue-xs-btn")
+               ...
         
                     # Locate "Expand All" buttom
                     expand_button = WebDriverWait(driver, 10).until(
@@ -428,31 +353,7 @@ Similar to the Addenda/Email stage, Q&As are displayed as an accordion:
                     # Assure its functionality
                     bid_questions_in_q_and_a = WebDriverWait(driver,20).until(
                         EC.presence_of_all_elements_located((By.CSS_SELECTOR,".question-submenu"))
-                    )
-
-                    # Now you can retrieve the text of the Q&As
-                    try:
-                        for bid_q_and_a_question in bid_questions_in_q_and_a:
-                            bid_q_and_a.append(bid_q_and_a_question.text)
-                    except Exception as exe:
-                        print("Q&A extraction did not work")
-                        print(exe)
-                        bid_q_and_a.append("No questions")
-                except:
-                    print("Buttom did not executed perhaps?")
-                    bid_q_and_a.append("No questions")
-                
-            except:
-                # Continue if not
-                variable = "There is zero questions"
-                bid_q_and_a.append([letter for letter in variable])
-
-        except TimeoutException:
-            bid_q_and_a.append("No questions")
-    
-    except:
-        print(f"Problem with the bid Q&A at {targeted_bids.text}")
-        bid_q_and_a.append("No questions")
+                    ...
 ```
 However, the only difference here is that each of the sets containing questions have two accordions, one for the opening of the set, and other(s) for the question itself. 
 
