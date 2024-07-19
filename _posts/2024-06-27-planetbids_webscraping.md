@@ -363,6 +363,88 @@ Another different approach we use here is the use of the *Expand All* buttom, wh
 
 ### Seventh Stage: Prospective Bidders
 
+What we do different here is to collect the prospective bidders by using the rowgroup. Why? We only want their information, no interaction is needed, therefore extracting the row data shortens the time taken for each iteration and extracts just what we need.  
+
+```python3
+...
+            try:
+                bid_prospective_bidders_tabulation = WebDriverWait(driver,10).until(
+                    EC.presence_of_element_located((By.XPATH, "//tbody[@role='rowgroup']"))
+                )
+                bid_prospective_bidders_rows = bid_prospective_bidders_tabulation.find_elements(By.TAG_NAME,"tr")
+                for bid_prospective_bidder in bid_prospective_bidders_rows:
+                    bid_prospective_bidders.append([bid_prospective_bidder.text])
+...
+```
+
+### Eighth Stage: Bid Results
+
+Last but not least, the bid results. The big difference here is that the bid results include a table:
+
+![accordion_example5](/assets/images/planetbids_extraction_image9.png)
+
+In it, we find the clickable elements which happen to be the bidders and their respective bid totals. 
+
+![accordion_example6](/assets/images/planetbids_extraction_image10.png)
+
+As we click them, a new tab is opened where we can find the respective clicked bidder's detail information (address, contact, etc.), sometimes their line items, and sometimes their subcontractors. Which of course, we strive to collect as it reveals usage patterns for the latter and item cost patterns for the former. 
+
+![accordion_example7](/assets/images/planetbids_extraction_image11.png)
+
+If the subcontractors tab is available, in it we find another accordion-type table, in which the subcontractor's details are found (address, licences, traits, etc.), which of course, we extract as well. Perhaps that will be quite useful in the future as we would be able to analyze patterns of subcontractors as well.
+
+![accordion_example8](/assets/images/planetbids_extraction_image12.png)
+
+### Ninth Stage: CSV Allocation
+
+After collecting the data and returning it within a list, we allocate each list within a csv column:
+
+```python3
+def allocationg_within_csv_file(extraction):
+
+    ...
+    
+    general_information = self[0]
+    line_items = self[1]
+    documents = self[2]
+    addenda = self[3]
+    q_and_a = self[4]
+    prospective_bidders = self[5]
+    bid_results = self[6]
+
+    ...
+
+    # Fill gaps with np.nan
+    general_information[0] += [np.nan] * (max_length - len(general_information[0]))
+    line_items[0] += [np.nan] * (max_length - len(line_items[0]))
+    documents[0] += [np.nan] * (max_length - len(documents[0]))
+    all_addenda += [np.nan] * (max_length - len(all_addenda))
+    q_and_a_refined += [np.nan] * (max_length - len(q_and_a_refined))
+    all_prospective_bidders += [np.nan] * (max_length - len(all_prospective_bidders))
+    all_bidders_and_subs_information += [np.nan] * (max_length - len(all_bidders_and_subs_information))
+
+    # Transcribe the newly modified data frames
+    df_columns = pd.DataFrame({
+        "BidGeneralInfo":general_information[0],
+        "BidLineItems":line_items[0],
+        "BidDocuments":documents[0],
+        "BidAddenda":all_addenda,
+        "BidQAndA":q_and_a_refined,
+        "BidProspectiveBidders":all_prospective_bidders,
+        "BidResults":all_bidders_and_subs_information
+    })
+
+    ...
+    
+```
+We take the output of our *extraction()* function as an input in our *allocating_within_csv_file()* function.
+
+And **voila**. We just leave our computer overnight and extract each of the municipality's planetbids. 
+
+
+
+
+
 
 
 
