@@ -1,104 +1,74 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.timeline-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.timeline-container {
+    flex: 1;
+    min-width: 300px;
+    max-width: 45%;
+    margin-bottom: 40px;
+}
+
+h2 {
+    text-align: center;
+    color: #D2122E;
 }
 
 .timeline {
     position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 20px 0;
 }
 
-.container {
-    padding: 10px 40px;
-    position: relative;
-    background-color: inherit;
-    width: 50%;
-}
-
-.container.left {
-    left: 0;
-}
-
-.container.right {
+.timeline::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: #FF9F55;
+    top: 0;
+    bottom: 0;
     left: 50%;
+    transform: translateX(-50%);
 }
 
-.content {
-    padding: 20px 30px;
-    background-color: white;
+.timeline-event {
     position: relative;
-    border-radius: 6px;
+    margin: 20px 0;
+    width: 100%;
+    padding: 20px 40px;
+    box-sizing: border-box;
 }
 
-.content h2 {
-    margin-top: 0;
-}
-
-.container::after {
-    content: "";
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 15px;
-    right: -17px;
+.timeline-content {
+    padding: 20px;
     background-color: white;
-    border: 4px solid #FF9F55;
-    border-radius: 50%;
-    z-index: 1;
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
-.left::after {
-    left: -17px;
+.timeline-content h2 {
+    margin: 0 0 10px;
+    font-size: 1.5em;
+    color: #D2122E;
 }
 
-.right::after {
-    left: -16px;
+.timeline-content p {
+    margin: 0;
 }
 
-.container.right::before {
-    content: " ";
-    height: 100%;
-    width: 10px;
-    background-color: #FF9F55;
-    position: absolute;
-    top: 0;
-    right: -25px;
-    z-index: 1;
-}
-
-.container.left::before {
-    content: " ";
-    height: 100%;
-    width: 10px;
-    background-color: #FF9F55;
-    position: absolute;
-    top: 0;
-    left: -25px;
-    z-index: 1;
-}
-
-@media screen and (max-width: 600px) {
-    .timeline::after {
-        left: 31px;
-    }
-
-    .container {
-        width: 100%;
-        padding-left: 70px;
-        padding-right: 25px;
-    }
-
-    .container::before {
-        left: 60px;
-        border: none;
-        height: 0;
-    }
-
-    .left::after, .right::after {
-        left: 15px;
-    }
-
-    .right {
-        left: 0%;
+@media screen and (max-width: 800px) {
+    .timeline-container {
+        max-width: 100%;
     }
 }
